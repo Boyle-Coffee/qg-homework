@@ -18,7 +18,7 @@ int main()
 	}
 	p=L;
 	printf("Please enter the data to initialize the linked list:"		
-		"(q to stop)\n");
+		"(not number to stop)\n");
 	while(scanf("%d",&data2)){											/*get the data ,if scanf returns 0 ,stop the loop*/ 
 		while(getchar()!='\n')
 			continue;
@@ -45,6 +45,8 @@ int main()
 		puts("A.insert      B.delete");
 		puts("C.print       D.destroy");
 		choice=getchar();
+		while(getchar()!='\n')		/*modification:discard the extra enter*/
+			continue;
 		switch(choice){					/*use the switch to judge the choice*/
 		case 'A':printf("Please enter the data:");		/*get the number and location to insert the node*/
 			data2=getInt();
@@ -68,30 +70,36 @@ int main()
 			}
 			num++;
 			break;
-		case 'B':printf("please tell me the location:");	/*get the location to delete the node*/
-			location=getInt();
-			while (location<=0){							/*check if the location is right*/
-				printf("the location must bigger than 0.Please enter again:");
-				location=getInt();
-			}
-			if(location==1)
-				DeleteList_DuL(L,&data2);
-			else{	
-			p=L;
-			for(i=1;i<=location-1;i++)
-				p=p->next;
-			DeleteList_DuL(p,&data2);
-			}
-			printf("OK!The data deleted is %d",data2);
-			num--;
-			break;
+		case 'B':if(num!=0){
+					printf("please tell me the location:");	/*get the location to delete the node*/
+					location=getInt();
+					while (location<=0||location>num){							/*check if the location is right*/
+						printf("the location is wrong.Please enter again:");
+						location=getInt();
+					}
+					if(location==1)
+						DeleteList_DuL(L,&data2);
+					else{	
+						p=L;
+						for(i=1;i<=location-1;i++)
+						p=p->next;
+						DeleteList_DuL(p,&data2);
+					}
+					printf("OK!The data deleted is %d",data2);
+					num--;
+					break;
+				 }
+				else
+					puts("The list is empty!");			/*modification:check if the list is empty*/
+				break;
 		case 'C':TraverseList_DuL(L,&print);
 				printf("\nthe number of nodes is %d",num);		/*print the data and number*/
 				break;
 		case 'D':DestroyList_DuL(&L);			/*destroy the list*/
-				printf("Done!\n");
+				printf("The list is destroyed.Done!\n");
 				return 0;
 				break;
+		default:printf("The choice you entered is wrong!please try again!");	/*modification:dispose the error enter*/
 		}
 		printf("\nq to quit\n");
 		c=getchar();
